@@ -17,8 +17,9 @@ module.exports = {
       autoIncrement: true
     },
     dateLimit: {
-      type: 'string',
+      type: 'ref',
       columnName: 'date_limit',
+      columnType: 'date',
       required: true
     },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
