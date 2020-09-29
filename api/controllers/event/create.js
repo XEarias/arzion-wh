@@ -30,56 +30,57 @@ const {
  * @param {String[]} origins
  * @param {String[]} destinations
  *
- * @returns {Origin[]} Nearest Origin's Index
+ * @returns {Promise<Origin[]>} Nearest Origin's Index
  */
 const getOrderedtOriginIndexes = function (origins, destinations) {
   let originIndexes = [];
 
-  distance.matrix(origins, destinations, (err, distances) => {
-    if (err) {
-      //TODO:
-    }
-
-    if(!distances) {
-      //TODO:
-    }
-
-    if (distances.status !== 'OK') {
-      //TODO:
-    }
-
-    for (const i in origins) {
-      for (const j in destinations) {
-
-        if (distances.rows[0].elements[j].status !== 'OK') {
-          continue;
-        }
-
-        const origin = distances.rows[i];
-
-        const { distance: { value: distance } } = origin.elements[j];
-
-        const originIndex = {
-          originalIndex: i,
-          distance
-        };
-
-        originIndexes.push(originIndex);
+  const distancePromise = new Promise((resolve, reject) => {
+    distance.matrix(origins, destinations, (err, distances) => {
+      if (err) {
+        reject(err);
       }
-    }
 
-    if(!originIndexes.length) {
-      //THROW
-    }
+      if(!distances) {
+        reject(new Error('NO_DISTANCES'));
+      }
 
-    // Sort descending
-    originIndexes.sort(({distance: distanceA}, {distance: distanceB}) => distanceB - distanceA);
+      if (distances.status !== 'OK') {
+        reject(new Error('NO_STATUS_OK'));
+      }
 
-    return originIndexes;
+      for (const i in origins) {
+        for (const j in destinations) {
+
+          if (distances.rows[0].elements[j].status !== 'OK') {
+            continue;
+          }
+
+          const origin = distances.rows[i];
+
+          const { distance: { value: distance } } = origin.elements[j];
+
+          const originIndex = {
+            originalIndex: i,
+            distance
+          };
+
+          originIndexes.push(originIndex);
+        }
+      }
+
+      if(!originIndexes.length) {
+        reject(new Error('NO_INDEXES_FOUND'));
+      }
+
+      // Sort descending
+      originIndexes.sort(({distance: distanceA}, {distance: distanceB}) => distanceB - distanceA);
+
+      resolve(originIndexes);
+    });
   });
 
-
-
+  return distancePromise;
 };
 
 
@@ -118,10 +119,10 @@ const sendIsOptimal = function (distance) {
  * @param {String[]} origins;
  * @param {String[]} destinations;
  *
- * @returns {OptimalOrigin[]} Nearest Origin's Index
+ * @returns {Promise<OptimalOrigin[]>} Nearest Origin's Index
  */
-const getOptimalOrigins = function (origins, destinations) {
-  const orderedOrigins = getOrderedtOriginIndexes(origins, destinations);
+const getOptimalOrigins = async function (origins, destinations) {
+  const orderedOrigins = await getOrderedtOriginIndexes(origins, destinations);
 
   for (const orderedOrigin in orderedOrigins) {
     const { distance } = orderedOrigin;
@@ -150,6 +151,7 @@ module.exports = {
     },
     truck: {
       type: 'number',
+      required: true
     },
     warehouse: {
       type: 'number'
@@ -159,10 +161,6 @@ module.exports = {
 
   },
   fn: async function ({order: orderId, eventType, truck: truckId, warehouse: warehouseId }) {
-    if (!truckId) {
-      //TODO: throw 
-    }
-
     const order = await Order.findOne({id: orderId}).populate('events').populate('customerAddress');
 
     if(!order) {
@@ -214,7 +212,7 @@ module.exports = {
         sails.log('Destinations Coordinates', destinations);
 
         //TODO: handle error getOptimalOrigins
-        const optimalOrigins = getOptimalOrigins(origins, destinations);
+        const optimalOrigins = await getOptimalOrigins(origins, destinations);
 
         sails.log('Origins Ordered', optimalOrigins);
 
@@ -231,7 +229,7 @@ module.exports = {
 
           const orderCount = await WarehouseHasOrder.count({warehouse: warehouse.id});
 
-          sails.log('Current warehouse total packages', orderCount)
+          sails.log('Current warehouse total packages', orderCount);
 
           // cant send to warehouse with 95% capacity
           if ( (warehouse.maxCapicity / orderCount) >= 0.95 ) {
