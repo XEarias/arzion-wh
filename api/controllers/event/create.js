@@ -80,7 +80,7 @@ const getOrderedtOriginIndexes = function (origins, destinations) {
       }
 
       // Sort descending
-      originIndexes.sort(({distance: distanceA}, {distance: distanceB}) => distanceB - distanceA);
+      originIndexes.sort(({distance: distanceA}, {distance: distanceB}) => distanceA - distanceB);
 
       resolve(originIndexes);
     });
