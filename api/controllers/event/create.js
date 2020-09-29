@@ -164,13 +164,16 @@ module.exports = {
     }
   },
   exits: {
-
+    unprocessableEntity: {
+      description: 'The entity was not found',
+      responseType: 'unprocessableEntity'
+    }
   },
   fn: async function ({order: orderId, eventType, truck: truckId, warehouse: warehouseId }) {
     const order = await Order.findOne({id: orderId}).populate('events').populate('customerAddress');
 
     if(!order) {
-      //TODO: no order exists
+      throw { unprocessableEntity:  { entity: 'order', id: orderId } };
     }
 
     sails.log('Order Exists!', order);
@@ -205,7 +208,7 @@ module.exports = {
 
         if (!truck) {
           sails.log('Truck not found');
-          //TODO: throw error
+          throw { unprocessableEntity:  { entity: 'truck', id: truckId } };
         }
 
         sails.log('Truck',  truck);
@@ -300,7 +303,7 @@ module.exports = {
 
         sails.log('Associations created');
 
-        newEvent = await Event.findOne({id: newEvent.id}).populate('trucks').populate('warehouses')
+        newEvent = await Event.findOne({id: newEvent.id}).populate('trucks').populate('warehouses');
 
         sails.log('Truck and Warehouse data populated', newEvent);
         break;
