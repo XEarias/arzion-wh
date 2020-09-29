@@ -229,7 +229,7 @@ module.exports = {
 
         sails.log('Origins Ordered', optimalOrigins);
 
-        const existsOptimal = !!warehouses.filter(({isOptimal}) => isOptimal).length;
+        const existsOptimal = !!optimalOrigins.filter(({isOptimal}) => isOptimal).length;
 
         sails.log('Origins Optimal exist', existsOptimal);
 
