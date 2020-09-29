@@ -165,15 +165,20 @@ module.exports = {
       //TODO: no order exists
     }
 
+    sails.log('Order Exists!', order);
+
     const { events } = order;
 
-    const { length: eventsCount } = events;
+    const eventsCount = events.length;
+    const lastEvent = events.pop();
+
+    sails.log('Order Events total', eventsCount);
+    sails.log('Last Event', lastEvent);
 
     let newEvent;
 
     switch(eventType) {
       case 'SEND_TO_WAREHOUSE':
-        const lastEvent = events.pop();
 
         if (eventsCount && lastEvent && lastEvent.eventType !== 'SEND_TO_CUSTOMER') {
           //TODO: throw "MUST BE A PREVIOUS EVENT SEND_TO_CUSTOMER" or be the first event
@@ -182,12 +187,14 @@ module.exports = {
         const warehouses = await Warehouse.find({});
 
         if (!warehouses) {
+          sails.log('Warehouse not found');
           //TODO: throw error
         }
 
         const truck = await Truck.findOne({id: truckId});
 
         if (!truck) {
+          sails.log('Truck not found');
           //TODO: throw error
         }
 
@@ -199,33 +206,51 @@ module.exports = {
 
         const destinations = [ addressCoordinates.join(',') ];
 
+        sails.log('Origins Coordinates', origins);
+        sails.log('Destinations Coordinates', destinations);
+
         //TODO: handle error getOptimalOrigins
         const optimalOrigins = getOptimalOrigins(origins, destinations);
 
+        sails.log('Origins Ordered', optimalOrigins);
+
         const existsOptimal = !!warehouses.filter(({isOptimal}) => isOptimal).length;
 
-        let nearestWarehouse;
+        sails.log('Origins Optimal exist', existsOptimal);
 
+        let nearestWarehouse;
 
         for (const { distanceCost: currentDistanceCost, isOptimal, originalIndex: warehouseIndex } in optimalOrigins) {
           const warehouse = warehouses[warehouseIndex];
 
+          sails.log('Current warehouse id', warehouse.id);
+
           const orderCount = await WarehouseHasOrder.count({warehouse: warehouse.id});
+
+          sails.log('Current warehouse total packages', orderCount)
 
           // cant send to warehouse with 95% capacity
           if ( (warehouse.maxCapicity / orderCount) >= 0.95 ) {
+            sails.log('warehouse limit reached');
+
             continue;
           }
 
           // Not exists optimal origin, send to nearest
           if (!existsOptimal) {
+            sails.log('warehouse with optimal cost not exists, send to nearest');
+
             nearestWarehouse = warehouse;
+
             break;
           }
 
           // first optimal origin
           if (isOptimal) {
+            sails.log('Current warehuose is optimal, send');
+
             nearestWarehouse = warehouse;
+
             break;
           }
 
@@ -234,9 +259,14 @@ module.exports = {
 
           // if not, send to nearest warehouse
           if (!warehouseToWait) {
+            sails.log('Send package to current');
+
             nearestWarehouse = warehouse;
+
             break;
           }
+
+          sails.log('Is better to wait');
 
           //TODO: Throw
         }
@@ -246,7 +276,9 @@ module.exports = {
           eventType
         };
 
-        const newEvent = await Event.create(newEventData).fetch();
+        newEvent = await Event.create(newEventData).fetch();
+
+        sails.log('New Event Created!', newEvent);
 
         const newEventHasWarehouseData = {event: newEvent.id, warehouse: nearestWarehouse.id};
         const newEventHasTruckData = {event: newEvent.id, truck: truck.id};
@@ -254,7 +286,11 @@ module.exports = {
 
         await Promise.all([EventHasTruck.create(newEventHasTruckData), EventHasWarehouse.create(newEventHasWarehouseData), WarehouseHasOrder.create(newWarehouseHasOrderData)]);
 
+        sails.log('Associations created');
+
         await Promise.all([newEvent.populate('truck'), newEvent.populate('warehouse')]);
+
+        sails.log('Truck and Warehouse data populated', newEvent);
 
         break;
       case 'IN_WAREHOUSE':
