@@ -131,7 +131,7 @@ const getOptimalOrigins = async function (origins, destinations) {
   const orderedOrigins = await getOrderedtOriginIndexes(origins, destinations);
 
   for (const orderedOrigin in orderedOrigins) {
-    const { distance } = orderedOrigin;
+    const { distance } = orderedOrigins[orderedOrigin];
 
     const { distanceCost, isOptimal } = sendIsOptimal(distance);
 
