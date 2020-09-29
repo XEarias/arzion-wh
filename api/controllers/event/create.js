@@ -165,8 +165,10 @@ module.exports = {
   },
   exits: {
     unprocessableEntity: {
-      description: 'The entity was not found',
       responseType: 'unprocessableEntity'
+    },
+    dataNotLoaded: {
+      responseType: 'dataNotLoaded'
     }
   },
   fn: async function ({order: orderId, eventType, truck: truckId, warehouse: warehouseId }) {
@@ -199,7 +201,7 @@ module.exports = {
 
         if (!warehouses) {
           sails.log('Warehouse not found');
-          //TODO: throw error
+          throw { unprocessableEntity:  { entity: 'Warehouse' } };
         }
 
         sails.log('Warehouses',  warehouses);
