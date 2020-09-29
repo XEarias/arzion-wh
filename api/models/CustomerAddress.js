@@ -32,7 +32,8 @@ module.exports = {
       required: true
     },
     notes: {
-      type: 'string'
+      type: 'string',
+      allowNull: true
     },
     addressLine: {
       type: 'ref',
