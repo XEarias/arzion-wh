@@ -232,7 +232,7 @@ module.exports = {
 
         let nearestWarehouse;
 
-        for (const { distanceCost: currentDistanceCost, isOptimal, originalIndex: warehouseIndex } in optimalOrigins) {
+        for (const { distanceCost: currentDistanceCost, isOptimal, originalIndex: warehouseIndex } of optimalOrigins) {
           const warehouse = warehouses[parseInt(warehouseIndex)];
 
           sails.log('Current warehouse id', warehouse.id);
@@ -300,10 +300,9 @@ module.exports = {
 
         sails.log('Associations created');
 
-        await Promise.all([newEvent.populate('truck'), newEvent.populate('warehouse')]);
+        newEvent = await Event.findOne({id: newEvent.id}).populate('trucks').populate('warehouses')
 
         sails.log('Truck and Warehouse data populated', newEvent);
-
         break;
       case 'IN_WAREHOUSE':
         break;
