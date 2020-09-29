@@ -199,12 +199,16 @@ module.exports = {
           //TODO: throw error
         }
 
+        sails.log('Warehouses',  warehouses);
+
         const truck = await Truck.findOne({id: truckId});
 
         if (!truck) {
           sails.log('Truck not found');
           //TODO: throw error
         }
+
+        sails.log('Truck',  truck);
 
         // make a coordinate array of GeoJSON point coordinates [long, lat] https://tools.ietf.org/html/rfc7946#section-9
         // joined with "," https://github.com/ecteodoro/google-distance-matrix#origins
@@ -229,7 +233,7 @@ module.exports = {
         let nearestWarehouse;
 
         for (const { distanceCost: currentDistanceCost, isOptimal, originalIndex: warehouseIndex } in optimalOrigins) {
-          const warehouse = warehouses[warehouseIndex];
+          const warehouse = warehouses[parseInt(warehouseIndex)];
 
           sails.log('Current warehouse id', warehouse.id);
 
