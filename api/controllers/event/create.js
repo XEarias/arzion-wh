@@ -39,20 +39,25 @@ const getOrderedtOriginIndexes = function (origins, destinations) {
     distance.matrix(origins, destinations, (err, distances) => {
       if (err) {
         reject(err);
+        return;
       }
 
       if(!distances) {
         reject(new Error('NO_DISTANCES'));
+        return;
       }
 
       if (distances.status !== 'OK') {
+        sails.log('Error response', distances);
         reject(new Error('NO_STATUS_OK'));
+        return;
       }
 
       for (const i in origins) {
         for (const j in destinations) {
+          sails.log('distances found', distances.rows[i].elements);
 
-          if (distances.rows[0].elements[j].status !== 'OK') {
+          if (distances.rows[i].elements[j].status !== 'OK') {
             continue;
           }
 
@@ -71,6 +76,7 @@ const getOrderedtOriginIndexes = function (origins, destinations) {
 
       if(!originIndexes.length) {
         reject(new Error('NO_INDEXES_FOUND'));
+        return;
       }
 
       // Sort descending
@@ -203,10 +209,10 @@ module.exports = {
         // make a coordinate array of GeoJSON point coordinates [long, lat] https://tools.ietf.org/html/rfc7946#section-9
         // joined with "," https://github.com/ecteodoro/google-distance-matrix#origins
 
-        const origins = warehouses.map((({position: {coordinates}}) => coordinates.join(',')));
-        const { customerAddress: { position: { coordinates: addressCoordinates } } } = order;
+        const origins = warehouses.map((({position: {coordinates: [long, lat]}}) => [lat,long].join(',')));
+        const { customerAddress: { position: { coordinates: [addressLong, addressLat] } } } = order;
 
-        const destinations = [ addressCoordinates.join(',') ];
+        const destinations = [ [ addressLat, addressLong ].join(',') ];
 
         sails.log('Origins Coordinates', origins);
         sails.log('Destinations Coordinates', destinations);
