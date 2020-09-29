@@ -1,12 +1,12 @@
 /**
- * Order.js
+ * WarehouseHasOrder.js
  *
  * @description :: A model definition represents a database table/collection.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
 module.exports = {
-  tableName: 'orders',
+  tableName: 'warehouse_has_orders',
   attributes: {
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
@@ -16,12 +16,7 @@ module.exports = {
       type: 'number',
       autoIncrement: true
     },
-    dateLimit: {
-      type: 'ref',
-      columnName: 'date_limit',
-      columnType: 'date',
-      required: true
-    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
@@ -30,22 +25,13 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    package: {
-      model: 'package',
-      columnName: 'package_id'
-    },
-    customerAddress: {
-      model: 'customerAddress',
-      columnName: 'customer_address_id'
-    },
-    events: {
-      collection: 'Event',
-      via: 'order'
+    order: {
+      model: 'order',
+      columnName: 'order_id'
     },
     warehouse: {
-      collection: 'Warehouse',
-      via: 'order',
-      through: 'WarehouseHasOrder'
+      model: 'warehouse',
+      columnName: 'warehouse_id'
     }
   }
 };

@@ -62,6 +62,11 @@ module.exports = {
       via: 'warehouse',
       through: 'EventHasWarehouse'
     },
+    orders: {
+      collection: 'order',
+      via: 'warehouse',
+      through: 'WarehouseHasOrder'
+    },
   }
 };
 
