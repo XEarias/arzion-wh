@@ -97,12 +97,13 @@ const getOrderedtOriginIndexes = function (origins, destinations) {
  * @returns {Number}
  */
 const getDistancePrice = function (distance) {
-  if (distance < 1000) {
-    // minimal value, 5 usd
-    return 5;
+  if (distance < 5000) {
+    // minimal value, 1 usd
+    return 1;
   }
 
-  return (distance / 1000) * 5;
+  // 1 usd per 5 km
+  return (distance / 5000) * 1;
 };
 
 /**
@@ -147,12 +148,12 @@ module.exports = {
   description: 'Create something.',
   inputs: {
     order: {
-      type: 'string',
+      type: 'number',
       required: true
     },
     eventType: {
       type: 'string',
-      isIn: [ 'SEND_TO_WAREHOUSE', 'IN_WAREHOUSE', 'SEND_TO_CUSTOMER', 'DELIVERED', 'RETURNED_TO_WAREHOUSE' ],
+      isIn: [ 'SEND_TO_WAREHOUSE', 'IN_WAREHOUSE', 'SEND_TO_CUSTOMER', 'DELIVERED'],
       required: true
     },
     truck: {
