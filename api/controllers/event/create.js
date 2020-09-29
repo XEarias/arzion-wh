@@ -159,6 +159,10 @@ module.exports = {
 
   },
   fn: async function ({order: orderId, eventType, truck: truckId, warehouse: warehouseId }) {
+    if (!truckId) {
+      //TODO: throw 
+    }
+
     const order = await Order.findOne({id: orderId}).populate('events').populate('customerAddress');
 
     if(!order) {
@@ -202,7 +206,7 @@ module.exports = {
         // joined with "," https://github.com/ecteodoro/google-distance-matrix#origins
 
         const origins = warehouses.map((({position: {coordinates}}) => coordinates.join(',')));
-        const { customerAddress: { coordinates: addressCoordinates } } = order;
+        const { customerAddress: { position: { coordinates: addressCoordinates } } } = order;
 
         const destinations = [ addressCoordinates.join(',') ];
 
