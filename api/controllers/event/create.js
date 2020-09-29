@@ -169,6 +169,9 @@ module.exports = {
     },
     dataNotLoaded: {
       responseType: 'dataNotLoaded'
+    },
+    dataConflict: {
+      responseType: 'dataConflict'
     }
   },
   fn: async function ({order: orderId, eventType, truck: truckId, warehouse: warehouseId }) {
@@ -194,7 +197,7 @@ module.exports = {
       case 'SEND_TO_WAREHOUSE':
 
         if (eventsCount && lastEvent && lastEvent.eventType !== 'SEND_TO_CUSTOMER') {
-          //TODO: throw "MUST BE A PREVIOUS EVENT SEND_TO_CUSTOMER" or be the first event
+          throw { dataConflict:  { entity: 'Event', conflict: 'SEND_TO_WAREHOUSE is invalid, because previous event SEND_TO_CUSTOMER must exist, or no event At all'} };
         }
 
         const warehouses = await Warehouse.find({});
@@ -226,7 +229,6 @@ module.exports = {
         sails.log('Origins Coordinates', origins);
         sails.log('Destinations Coordinates', destinations);
 
-        //TODO: handle error getOptimalOrigins
         const optimalOrigins = await getOptimalOrigins(origins, destinations);
 
         sails.log('Origins Ordered', optimalOrigins);
