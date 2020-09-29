@@ -19,7 +19,7 @@ module.exports = {
     eventType: {
       type: 'string',
       columnName: 'event_type',
-      isIn: [ 'WAY_TO_WAREHOUSE', 'IN_WAREHOUSE', 'WAY_TO_CUSTOMER', 'DELIVERED', 'RETURNED_TO_WAREHOUSE' ],
+      isIn: [ 'SEND_TO_WAREHOUSE', 'IN_WAREHOUSE', 'SEND_TO_CUSTOMER', 'DELIVERED', 'RETURNED_TO_WAREHOUSE' ],
       required: true
     },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
