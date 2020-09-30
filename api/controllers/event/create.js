@@ -103,7 +103,7 @@ const getDistancePrice = function (distance) {
   }
 
   // 1 usd per 5 km
-  return (distance / 5000) * 1;
+  return (distance / 5000);
 };
 
 /**
@@ -191,6 +191,10 @@ module.exports = {
 
     sails.log('Order Events total', eventsCount);
     sails.log('Last Event', lastEvent);
+
+    if (lastEvent && lastEvent.eventType === 'DELIVERED') {
+      throw { dataConflict:  { entity: 'Event', conflict: 'Order was delivered already'} };
+    }
 
     let newEvent;
 
@@ -288,7 +292,7 @@ module.exports = {
 
           sails.log('Is better to wait');
 
-          //TODO: Throw
+          throw { dataConflict:  { entity: 'Event', conflict: 'No warehouse is optimal to send, better wait'} };
         }
 
         const newEventData = {
