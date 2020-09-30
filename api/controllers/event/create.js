@@ -10,7 +10,7 @@ const {
 
 module.exports = {
   friendlyName: 'Create',
-  description: 'Create something.',
+  description: 'Create Event',
   inputs: {
     order: {
       type: 'number',
