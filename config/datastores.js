@@ -49,10 +49,10 @@ module.exports.datastores = {
     *                                                                          *
     ***************************************************************************/
     adapter: 'sails-postgresql',
-    url: 'http://localhost:5432',
-    user: 'postgres',
-    password: 'mysecretpassword',
-    database: 'postgres'
+    url: process.env.POSTGRES_URL,
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB
   },
 
 

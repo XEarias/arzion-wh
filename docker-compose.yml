@@ -5,12 +5,12 @@ services:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      - POSTGRES_URL=http://localhost:5432
+      - POSTGRES_URL=postgres:5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=mysecretpassword
       - POSTGRES_DB=postgres
     ports:
-      - "1338:1337"
+      - "1337:1337"
     links:
       - postgres
   postgres:
@@ -20,4 +20,6 @@ services:
       - POSTGRES_PASSWORD=mysecretpassword
       - POSTGRES_DB=postgres
     ports:
-      - "1337:5432"
+      - "5432:5432"
+    volumes:
+      - ./compose:/docker-entrypoint-initdb.d
