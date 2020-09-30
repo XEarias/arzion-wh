@@ -176,15 +176,12 @@ function getOrderedtOriginIndexes(origins, destinations) {
       }
 
       if (distances.status !== 'OK') {
-        sails.log('Error response', distances);
         reject(new Error('NO_STATUS_OK'));
         return;
       }
 
       for (const i in origins) {
         for (const j in destinations) {
-          sails.log('distances found', distances.rows[i].elements);
-
           if (distances.rows[i].elements[j].status !== 'OK') {
             continue;
           }
