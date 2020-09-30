@@ -127,6 +127,4 @@ module.exports = {
 
     return newEvent;
   }
-
-
 };
