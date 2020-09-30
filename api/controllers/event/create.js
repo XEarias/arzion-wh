@@ -109,7 +109,11 @@ module.exports = {
         const newEventHasTruckData = {event: newEvent.id, truck: truck.id};
         const newWarehouseHasOrderData = {warehouse: nearestWarehouse.id, order: order.id};
 
-        await Promise.all([EventHasTruck.create(newEventHasTruckData), EventHasWarehouse.create(newEventHasWarehouseData), WarehouseHasOrder.create(newWarehouseHasOrderData)]);
+        await Promise.all([
+          EventHasTruck.create(newEventHasTruckData),
+          EventHasWarehouse.create(newEventHasWarehouseData),
+          WarehouseHasOrder.create(newWarehouseHasOrderData)
+        ]);
 
         sails.log('Associations created');
 
