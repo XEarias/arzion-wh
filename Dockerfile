@@ -8,8 +8,6 @@ RUN npm i -g pm2
 
 COPY . .
 
-RUN ls -la
-
 RUN npm ci
 
 ENV NODE_ENV production
