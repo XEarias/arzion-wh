@@ -20,20 +20,18 @@
   "devDependencies": {
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.21.2"
+    "eslint-plugin-import": "^2.21.2",
+    "jest": "^26.4.2"
   },
   "scripts": {
-    "start": "NODE_ENV=production node app.js",
-    "test": "npm run lint && npm run custom-tests && echo 'Done.'",
-    "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
-    "custom-tests": "echo \"(No other custom tests yet.)\" && echo"
+    "test": "jest --coverage"
   },
   "main": "app.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/anonymous node/sails user/arzion-wh.git"
   },
-  "author": "anonymous node/sails user",
+  "author": "Xavier arias",
   "license": "",
   "engines": {
     "node": "^12.18"
