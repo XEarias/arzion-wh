@@ -212,7 +212,7 @@ function getOrderedtOriginIndexes(origins, destinations) {
   });
 
   return distancePromise;
-};
+}
 
 
 /**
@@ -229,7 +229,7 @@ function getDistancePrice(distance) {
 
   // 1 usd per 5 km
   return (distance / 5000);
-};
+}
 
 /**
  *
@@ -244,7 +244,7 @@ function sendIsOptimal(distance) {
   const isOptimal = distanceCost < 70;
 
   return { distanceCost, isOptimal };
-};
+}
 
 /**
  *
@@ -266,4 +266,4 @@ async function getOptimalOrigins(origins, destinations) {
   }
 
   return orderedOrigins;
-};
+}
