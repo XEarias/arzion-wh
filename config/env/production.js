@@ -47,17 +47,11 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     default: {
-      // adapter: 'sails-mysql',
-      // url: 'mysql://user:password@host:port/database',
-      //--------------------------------------------------------------------------
-      //  /\   To avoid checking it in to version control, you might opt to set
-      //  ||   sensitive credentials like `url` using an environment variable.
-      //
-      //  For example:
-      //  ```
-      //  sails_datastores__default__url=mysql://admin:myc00lpAssw2D@db.example.com:3306/my_prod_db
-      //  ```
-      //--------------------------------------------------------------------------
+      adapter: 'sails-postgresql',
+      url: process.env.POSTGRES_URL,
+      user: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB
 
       /****************************************************************************
       *                                                                           *
