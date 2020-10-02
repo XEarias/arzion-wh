@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  warehouses:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - POSTGRES_URL=postgres:5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=postgres
+      - GOOGLE_API_KEY=AIzaSyA_J4Ud0mxKNI77EI5eoh2WW7O1DmBSZb8
+    ports:
+      - "1337:1337"
+    links:
+      - postgres
+  postgres:
+    image: postgis/postgis:12-3.0
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
