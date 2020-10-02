@@ -232,10 +232,17 @@ function getDistancePrice(distance) {
 }
 
 /**
+ * @typedef {Object} calculatedCost
+ * @property {Number} distanceCost
+ * @property {Boolean} isOptimal
+ */
+
+
+/**
  *
  * @param {Number} distance Distance in meters
  *
- * @returns {Object}
+ * @returns {calculatedCost}
  */
 function sendIsOptimal(distance) {
   //70 usd, default late arrival price
@@ -267,3 +274,8 @@ async function getOptimalOrigins(origins, destinations) {
 
   return orderedOrigins;
 }
+
+module.exports.getDistancePrice = getDistancePrice;
+module.exports.sendIsOptimal = sendIsOptimal;
+module.exports.getOptimalOrigins = getOptimalOrigins;
+module.exports.getOrderedtOriginIndexes = getOrderedtOriginIndexes;
