@@ -1,26 +1,79 @@
-# arzion-wh
+NodeJs erbium Sails based API rest. 	:rocket:
 
-a [Sails v1](https://sailsjs.com) application
+### Tecnologies
 
+The project uses Postgres 12 and [Postgis 3](https://postgis.net/)
 
-### Links
+### Database
+![database](https://i.ibb.co/4TXGhcP/db.png)
 
-+ [Sails framework documentation](https://sailsjs.com/get-started)
-+ [Version notes / upgrading](https://sailsjs.com/documentation/upgrading)
-+ [Deployment tips](https://sailsjs.com/documentation/concepts/deployment)
-+ [Community support options](https://sailsjs.com/support)
-+ [Professional / enterprise options](https://sailsjs.com/enterprise)
+### Docs
 
-
-### Version info
-
-This app was originally generated on Tue Sep 22 2020 09:24:08 GMT-0300 (GMT-03:00) using Sails v1.3.1.
-
-<!-- Internally, Sails used [`sails-generate@2.0.0`](https://github.com/balderdashy/sails-generate/tree/v2.0.0/lib/core-generators/new). -->
+The project comes with a complete endpoints doc:
+* swagger.yml file ([open api v3](https://github.com/OAI/OpenAPI-Specification)) 
+* postman.json file ([postman](https://github.com/postmanlabs/postman-docs))
 
 
+### Docker/Docker Compose :whale:
 
-<!--
-Note:  Generators are usually run using the globally-installed `sails` CLI (command-line interface).  This CLI version is _environment-specific_ rather than app-specific, thus over time, as a project's dependencies are upgraded or the project is worked on by different developers on different computers using different versions of Node.js, the Sails dependency in its package.json file may differ from the globally-installed Sails CLI release it was originally generated with.  (Be sure to always check out the relevant [upgrading guides](https://sailsjs.com/upgrading) before upgrading the version of Sails used by your app.  If you're stuck, [get help here](https://sailsjs.com/support).)
--->
+You can build a compose:
+```
+$ docker-compose up --build
+```
 
+#####Initial DB
+The project comes with a fully loaded db, have around 5000 packages/orders to test.
+
+![orders](https://i.ibb.co/R7dGfy4/orders.png)
+
+Orders's indexes between 100 - 5000 are valid, for example:
+
+```
+{
+    order: 199 // # 100 - 5000 are valid 
+}
+```
+
+The order have 10 possible addresses around Argentina:
+![address](https://i.ibb.co/N3PY78K/customer.png)
+
+Same with the warehouses, 10 different addressess:
+![wh1](https://i.ibb.co/YdyKMg6/cities.png)
+![wh2](https://i.ibb.co/QkDnd69/cities-2.png)
+
+### Environment Variables
+
+| Name                                               
+| :-----------          
+| **POSTGRES_URL**      
+| **POSTGRES_USER**     
+| **POSTGRES_PASSWORD** 
+| **POSTGRES_DB**       
+| **GOOGLE_API_KEY**    
+
+### Unit Tests :beetle:
+
+You can run test using npm scripts:
+
+```
+$ npm ci 
+$ npm run test
+```
+Tests with [Jest](https://jestjs.io/)
+
+### Stress Tests :bomb:
+
+You can run stress test using [K6](https://k6.io/docs/getting-started/running-k6) tool:
+
+```
+$ docker run -i loadimpact/k6 run - <stress-test.js
+```
+Remember to start the server first :wink:
+
+### TODO:
+
+* Swagger server
+* Redis cache
+* Sonarqube spec file
+* Kubernetes/Openshift/Rancher spec file
+* Logs with ElasticSearch
