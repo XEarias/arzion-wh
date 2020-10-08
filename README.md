@@ -1,10 +1,11 @@
 NodeJs erbium Sails based API rest. 	:rocket:
 
-### Tecnologies
+### Technologies
 
 The project uses Postgres 12 and [Postgis 3](https://postgis.net/)
 
 ### Database
+![der](https://i.ibb.co/MghR5Tt/DER.png)
 ![database](https://i.ibb.co/4TXGhcP/db.png)
 
 ### Docs
@@ -21,7 +22,7 @@ You can build a compose:
 $ docker-compose up --build
 ```
 
-#####Initial DB
+#### Initial DB
 The project comes with a fully loaded db, have around 5000 packages/orders to test.
 
 ![orders](https://i.ibb.co/R7dGfy4/orders.png)
@@ -34,10 +35,10 @@ Orders's indexes between 100 - 5000 are valid, for example:
 }
 ```
 
-The order have 10 possible addresses around Argentina:
+The order have 10 possible addresses inside Argentina:
 ![address](https://i.ibb.co/N3PY78K/customer.png)
 
-Same with the warehouses, 10 different addressess:
+Same with the warehouses, 10 different addresses:
 ![wh1](https://i.ibb.co/YdyKMg6/cities.png)
 ![wh2](https://i.ibb.co/QkDnd69/cities-2.png)
 
